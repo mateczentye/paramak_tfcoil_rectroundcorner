@@ -1,5 +1,5 @@
 import pytest
-pytest.importorskip('paramak')
+#pytest.importorskip('paramak')
 import paramak_tfcoil_rectroundcorner as ptfc
 
 
@@ -12,14 +12,14 @@ obj = ptfc.ToroidalFieldCoilRectangleRoundCorners(
     )
 
 @pytest.mark.parametric
-def test_surface_area():
+def test_parametric_surface_area():
     paramak_area = obj.area
     print(paramak_area)
     package_area = ptfc.surface_area((50, 0),(100, 100), 20, 10)
     assert pytest.approx(package_area) == paramak_area
 
 @pytest.mark.parametric
-def test_volume():
+def test_parametric_volume():
     paramak_vol = obj.volume
     package_vol = ptfc.volume((50, 0),(100, 100), 20, 10)
     assert pytest.approx(package_vol) == paramak_vol
