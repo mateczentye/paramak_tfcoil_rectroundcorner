@@ -26,8 +26,8 @@ jobs:
           pip install flake8 pytest
           pip install numpy
           pip install paramak
+          pip install freecad==0.14
           pip install cadquery
-          pip install freecad
           python setup.py install
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       - name: Lint with flake8
