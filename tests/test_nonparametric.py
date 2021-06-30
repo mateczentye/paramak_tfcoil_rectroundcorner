@@ -1,4 +1,5 @@
 import pytest
+pytest.importorskip('paramak')
 import paramak_tfcoil_rectroundcorner as ptfc
 
 
