@@ -1,7 +1,7 @@
 """
 The module contains testing functions for Paramak use. It calculates the 
 """
-from core import ToroidalFieldCoilRectangleRoundCorners as tfc
+from paramak_tfcoil_rectroundcorner import ToroidalFieldCoilRectangleRoundCorners as tfc
 from tf_coil_coordinator import find_points
 from math import pi
 
