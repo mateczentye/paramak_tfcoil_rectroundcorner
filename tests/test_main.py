@@ -21,9 +21,7 @@ def test_surface_area():
 
 @pytest.mark.value
 def test_volume():
-    paramak_vol = ExtrudeMixedShape(
-        points = find_points((50, 0), (100, 100), 20, line_type=True),
-        distance=10,).volume
+    paramak_vol = obj.volume
     package_vol = ptfc.volume((50, 0),(100, 100), 20, 10)
     assert pytest.approx(package_vol) == paramak_vol
 
