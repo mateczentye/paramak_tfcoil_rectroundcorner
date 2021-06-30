@@ -1,7 +1,7 @@
 """
 The module contains testing functions for Paramak use. It calculates the 
 """
-from core import ToroidalFieldCoilRectangleRoundCorners as tfc
+from paramak_tfcoil_rectroundcorner import ToroidalFieldCoilRectangleRoundCorners as tfc
 from tf_coil_coordinator import find_points
 from math import pi
 
@@ -19,7 +19,7 @@ def surface_area(lower_left,middle_right,thickness,extrusion_length,test=False,X
         
     analyse_attributes = test_object.analyse_attributes
     #print(dir(tfc))
-    print(analyse_attributes)
+    print("analyse_attributes:",analyse_attributes)
     print(find_points(lower_left,middle_right,thickness,test=False,line_type=False,analyse=True))
     base, height, inner_rad, outter_rad = find_points(lower_left,middle_right,thickness,test=False,line_type=False,analyse=True)
     
@@ -63,11 +63,11 @@ def volume(lower_left,middle_right,thickness,extrusion_length,test=False):
     it takes an additional variable for extrusion length which is the thickness of the coil
     """
     face_area = surface_area(lower_left,middle_right,thickness,extrusion_length,test=False,XZ_face_only=True)
-    
+    total_shape_volume = face_area * extrusion_length
+
     if test == True:
         print("Self testing:\nArea of the XZ plane face:\n", face_area)
-
-    total_shape_volume = face_area * extrusion_length
+        print("Total Shape Volume is:", total_shape_volume)
 
     return total_shape_volume
 

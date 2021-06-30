@@ -1,3 +1,4 @@
+from math import dist
 from typing import Optional, Tuple, Union
 from _pytest.python_api import raises
 from numpy.lib.function_base import angle
@@ -83,25 +84,39 @@ class ToroidalFieldCoilRectangleRoundCorners(ExtrudeMixedShape):
             0
         ]
 
-
         ### Check if input values are what they meant to be ###
         if type(self.lower_inner_coordinates) != tuple or type(self.mid_point_coordinates) != tuple:
             raise TypeError("Invalid input - Coordinates must be a tuple")
 
-        elif type(self.thickness) == float or type(self.thickness) == int:
-            raise TypeError("Invalid input - Thickness must be a number")
+        if type(self.thickness[0]) != float:
+            if type(self.thickness[0]) != int:
+                raise TypeError("Invalid input - Thickness must be a number")
+        
+        if type(distance) != float:
+            if type(distance) != int:
+                raise TypeError("Invalid input - Distance must be a number")
+        
+        if (number_of_coils % 1) != 0:
+            raise TypeError("Invalid input - Number of Coils must be an integer number")
             
-        elif len(self.lower_inner_coordinates) != 2 or len(self.mid_point_coordinates) != 2:
+        if len(self.lower_inner_coordinates) != 2 or len(self.mid_point_coordinates) != 2:
             raise ValueError("The input tuples are too long or too short, they must be 2 element long")
 
-        elif self.lower_inner_coordinates[0] > self.mid_point_coordinates[0]:
+        if self.lower_inner_coordinates[0] > self.mid_point_coordinates[0]:
             raise ValueError("The middle point's x-coordinate must be larger than the lower inner point's x-coordinate")
+
+        if type(test) != bool:
+            raise TypeError("test argument must be a Boolean")
+        
+        if type(analyse) != bool:
+            raise TypeError("analyse argument must br a Boolean")
+       
         else:
             ### Adding hidden attributes for analyse list population
-            
             # inner base length of the coil
             self._base_length = mid_point_coordinates[0] - lower_inner_coordinates[0]
             self.analyse_attributes[0] = self._base_length
+
             # height of the coil
             self._height = abs(mid_point_coordinates[1] - lower_inner_coordinates[1])*2
             self.analyse_attributes[1] = self._height
@@ -141,7 +156,6 @@ class ToroidalFieldCoilRectangleRoundCorners(ExtrudeMixedShape):
         mid_point_coordinates must be a 2 elemenet tuple
         thickness must be a float or an int
         test=True will print the returned coordinates to console
-        line_type=True will return a 3 element tuple with line types for mixed shape paramak functions
         analyse=True will return values for volumetric and surface analysis for 3D parametric shape 
         """
 
@@ -155,7 +169,7 @@ class ToroidalFieldCoilRectangleRoundCorners(ExtrudeMixedShape):
         base_length = self.analyse_attributes[0]
         height = self.analyse_attributes[1]
         
-        ### 10 points/tuples are returned from the initial 2 coordinates and thickness value
+        ### 10 points/tuples for initial calculation and to get aux points
         p1 = (lower_x,lower_z)
         p2 = (p1[0]+base_length,p1[1])
         p3 = (p2[0],p2[1]+height)
@@ -171,8 +185,8 @@ class ToroidalFieldCoilRectangleRoundCorners(ExtrudeMixedShape):
         outter_curve_radius = self.analyse_attributes[3]
 
         ### New subroutines to calculate inner and outter curve mid-points, x and y displacement from existing points
-        # long shift does a sin(45)*radius of curvature amount of shift
-        # short shift does a (1-sin(45))*radius of curvature amount of shift
+        # long shift does a sin(45)*radius of curvature shift
+        # short shift does a (1-sin(45))*radius of curvature shift
         def shift_long(radius):
             """radius is the radius of curvature"""
             return (2**0.5)*0.5*radius
@@ -196,6 +210,7 @@ class ToroidalFieldCoilRectangleRoundCorners(ExtrudeMixedShape):
 
         ### List holding the points that are being returned by the function
         points = [p1,p11,p12,p13,p14,p15,p16,p4,p5,p17,p18,p19,p20,p21,p22,p10]
+        ### List that holds the points with the corresponding line types
         tri_points = []
         lines = ["straight"] + ['circle']*2 + ['straight'] + ['circle']*2 + ['straight']*3 + ['circle']*2 + ['straight'] + ['circle']*2 + ['straight']*2
 
@@ -203,27 +218,17 @@ class ToroidalFieldCoilRectangleRoundCorners(ExtrudeMixedShape):
             tri_points.append(points[i] + (lines[i],))
 
         self.points = tri_points
-        """
-        for att in [base_length,height,inner_curve_radius,outter_curve_radius]:
-            if att not in self.analyse_attributes:
-                self.analyse_attributes.append(att) 
-        """
+
+        # For self testing and debugging
         if self.test == True:
             print(tri_points)
-
         if self.analyse == True:
             print(self.analyse_attributes)
 
-
-                    
     def find_azimuth_placement_angle(self):
         """ Finds the placement angles from the number of coils given in a 360 degree """
         angles = list(np.linspace(0, 360, self.number_of_coils[0], endpoint = False))        
         self.azimuth_placement_angle = angles
-
-    def get_analyse_attributes(self):
-        print("Attributes for Analysis:\n",self.analyse_attributes)
-        return self.analyse_attributes
 
 if __name__== "__main__":
         
@@ -232,10 +237,8 @@ if __name__== "__main__":
         mid_point_coordinates= (100,100),
         thickness= 20,
         distance= 20,
-        number_of_coils= 10,
+        number_of_coils= 1,
         rotation_angle=180,
         test=True,
         analyse=True
         )
-    obj.show()
-    print(obj.get_analyse_attributes())
