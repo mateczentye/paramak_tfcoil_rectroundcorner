@@ -1,6 +1,6 @@
 import pytest
 #pytest.importorskip('paramak')
-import paramak_tfcoil_rectroundcorner as ptfc
+#import paramak_tfcoil_rectroundcorner as ptfc
 
 
 obj = ptfc.ToroidalFieldCoilRectangleRoundCorners(
