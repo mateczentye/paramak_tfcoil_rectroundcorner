@@ -84,6 +84,7 @@ class ToroidalFieldCoilRectangleRoundCorners(ExtrudeMixedShape):
             0
         ]
 
+        print(mid_point_coordinates)
         ### Check if input values are what they meant to be ###
         if type(self.lower_inner_coordinates) != tuple or type(self.mid_point_coordinates) != tuple:
             raise TypeError("Invalid input - Coordinates must be a tuple")
@@ -99,7 +100,7 @@ class ToroidalFieldCoilRectangleRoundCorners(ExtrudeMixedShape):
         if (number_of_coils % 1) != 0:
             raise TypeError("Invalid input - Number of Coils must be an integer number")
             
-        if len(self.lower_inner_coordinates) != 2 or len(self.mid_point_coordinates) != 2:
+        if len(lower_inner_coordinates) != 2 or len(mid_point_coordinates) != 2:
             raise ValueError("The input tuples are too long or too short, they must be 2 element long")
 
         if self.lower_inner_coordinates[0] > self.mid_point_coordinates[0]:
