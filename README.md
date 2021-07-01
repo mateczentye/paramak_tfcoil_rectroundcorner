@@ -10,3 +10,8 @@ To install:
 ```bash
 pip install paramak_tfcoil_rectroundcorner
 ```
+
+To get docker image:
+```bash
+docker pull mateczentye/paramak_tfcoil_rectroundcorner:latest
+```
