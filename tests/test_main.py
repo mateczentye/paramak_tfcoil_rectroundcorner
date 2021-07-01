@@ -94,3 +94,6 @@ def test_input_param_num_coil():
             distance= 10,
             number_of_coils= 1.5,
             )
+
+def test_random_fail():
+    assert 1 == 0
