@@ -2,7 +2,7 @@
 The module contains testing functions for Paramak use. It calculates the 
 """
 from paramak_tfcoil_rectroundcorner import ToroidalFieldCoilRectangleRoundCorners as tfc
-from tf_coil_coordinator import find_points
+#from tf_coil_coordinator import find_points
 from math import pi
 
 def surface_area(lower_left,middle_right,thickness,extrusion_length,test=False,XZ_face_only=False,extrusion_area_only=False):
@@ -18,10 +18,8 @@ def surface_area(lower_left,middle_right,thickness,extrusion_length,test=False,X
         )
         
     analyse_attributes = test_object.analyse_attributes
-    #print(dir(tfc))
-    print("analyse_attributes:",analyse_attributes)
-    print(find_points(lower_left,middle_right,thickness,test=False,line_type=False,analyse=True))
-    base, height, inner_rad, outter_rad = find_points(lower_left,middle_right,thickness,test=False,line_type=False,analyse=True)
+    
+    base, height, inner_rad, outter_rad = analyse_attributes
     
     # The surface area of the face in XZ plane is divisible into 5 segments
     base_segment_area = thickness * (base - inner_rad)
