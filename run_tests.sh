@@ -1,2 +1,2 @@
 
-pytest tests/test_main.py
+pytest tests/
