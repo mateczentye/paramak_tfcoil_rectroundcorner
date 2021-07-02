@@ -167,7 +167,7 @@ class ToroidalFieldCoilRectangleRoundCorners(ExtrudeMixedShape):
         mid_x, mid_z = self.mid_point_coordinates
 
         ### redifine values to be floats to make it look consistent 
-        lower_x,lower_z, mid_x, mid_z, thickness = float(lower_x),float(lower_z), float(mid_x),float(mid_z), float(self.thickness[0])
+        lower_x,lower_z, mid_x, mid_z, thickness = float(lower_x),float(lower_z), float(mid_x),float(mid_z), float(self.thickness)
 
         ### Define differences to avoid miss claculation due to signs
         base_length = self.analyse_attributes[0]
@@ -241,7 +241,7 @@ class ToroidalFieldCoilRectangleRoundCorners(ExtrudeMixedShape):
 
     def find_azimuth_placement_angle(self):
         """ Finds the placement angles from the number of coils given in a 360 degree """
-        angles = list(np.linspace(0, 360, self.number_of_coils[0], endpoint = False))        
+        angles = list(np.linspace(0, 360, self.number_of_coils, endpoint = False))        
         self.azimuth_placement_angle = angles
 
 
@@ -278,7 +278,7 @@ class ToroidalFieldCoilRectangleRoundCorners(ExtrudeMixedShape):
 
         self.solid = solid
         print(self.with_inner_leg)
-        if self.with_inner_leg[0] == True:
+        if self.with_inner_leg == True:
             print("creating Inner Leg")
             inner_leg_solid = cq.Workplane(self.workplane)
             inner_leg_solid = inner_leg_solid.polyline(self.inner_leg_connection_points).close().extrude(distance=-self.distance / 2, both=True)
