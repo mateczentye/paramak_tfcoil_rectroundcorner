@@ -1,9 +1,13 @@
 from math import dist
+from re import S
 from typing import Optional, Tuple, Union
 from _pytest.python_api import raises
+from cadquery.occ_impl.shapes import Wire
 from numpy.lib.function_base import angle
 from paramak.parametric_shapes.extruded_mixed_shape import ExtrudeMixedShape
 import numpy as np
+import cadquery as cq
+from paramak.utils import calculate_wedge_cut
 
 class ToroidalFieldCoilRectangleRoundCorners(ExtrudeMixedShape):
     """
@@ -29,7 +33,7 @@ class ToroidalFieldCoilRectangleRoundCorners(ExtrudeMixedShape):
         (changing azimuth_placement_angle by dividing 360 by
         the amount given) Defaults to 1
 
-        inner_coil: Boolean to include the inside of the Coils
+        with_inner_leg: Boolean to include the inside of the Coils
 
         file_name_stp: Defults to "ToroidalFieldCoilRectangleRoundCorners.stp"
 
@@ -53,7 +57,7 @@ class ToroidalFieldCoilRectangleRoundCorners(ExtrudeMixedShape):
         thickness: Union[float,int],
         distance: float,
         number_of_coils: int,
-        inner_coil: Optional[bool] = True,
+        with_inner_leg: Optional[bool] = True,
         stp_filename: Optional[str] = "ToroidalFieldCoilRectangleRoundCorners.stp",
         stl_filename: Optional[str] = "ToroidalFieldCoilRectangleRoundCorners.stl",
         material_tag: Optional[str] = "outter_tf_coil_mat",
@@ -72,9 +76,9 @@ class ToroidalFieldCoilRectangleRoundCorners(ExtrudeMixedShape):
 
         self.lower_inner_coordinates = lower_inner_coordinates[0], lower_inner_coordinates[1]
         self.mid_point_coordinates = mid_point_coordinates[0], mid_point_coordinates[1]
-        self.thickness = thickness,
-        self.number_of_coils = number_of_coils,
-        self.inner_coil = inner_coil,
+        self.thickness = thickness
+        self.number_of_coils = number_of_coils
+        self.with_inner_leg = with_inner_leg
         self.test = test
         self.analyse = analyse
         self.analyse_attributes = [
@@ -84,13 +88,12 @@ class ToroidalFieldCoilRectangleRoundCorners(ExtrudeMixedShape):
             0
         ]
 
-        print(mid_point_coordinates)
         ### Check if input values are what they meant to be ###
         if type(self.lower_inner_coordinates) != tuple or type(self.mid_point_coordinates) != tuple:
             raise TypeError("Invalid input - Coordinates must be a tuple")
 
-        if type(self.thickness[0]) != float:
-            if type(self.thickness[0]) != int:
+        if type(self.thickness) != float:
+            if type(self.thickness) != int:
                 raise TypeError("Invalid input - Thickness must be a number")
         
         if type(distance) != float:
@@ -185,9 +188,10 @@ class ToroidalFieldCoilRectangleRoundCorners(ExtrudeMixedShape):
         inner_curve_radius = self.analyse_attributes[2]
         outter_curve_radius = self.analyse_attributes[3]
 
-        ### New subroutines to calculate inner and outter curve mid-points, x and y displacement from existing points
-        # long shift does a sin(45)*radius of curvature shift
-        # short shift does a (1-sin(45))*radius of curvature shift
+        """ New subroutines to calculate inner and outter curve mid-points, x and y displacement from existing points
+            long shift does a sin(45)*radius of curvature shift
+            short shift does a (1-sin(45))*radius of curvature shift """
+
         def shift_long(radius):
             """radius is the radius of curvature"""
             return (2**0.5)*0.5*radius
@@ -220,6 +224,15 @@ class ToroidalFieldCoilRectangleRoundCorners(ExtrudeMixedShape):
 
         self.points = tri_points
 
+        inner_p1 = (p1[0], p1[1])
+        inner_p2 = (p1[0] + thickness, p1[1])
+        inner_p3 = (p4[0] + thickness, p4[1])
+        inner_p4 = (p4[0], p4[1])
+        
+        self.inner_leg_connection_points = [inner_p1, inner_p2, inner_p3, inner_p4]
+
+
+
         # For self testing and debugging
         if self.test == True:
             print(tri_points)
@@ -231,6 +244,56 @@ class ToroidalFieldCoilRectangleRoundCorners(ExtrudeMixedShape):
         angles = list(np.linspace(0, 360, self.number_of_coils[0], endpoint = False))        
         self.azimuth_placement_angle = angles
 
+
+    def create_solid(self):
+        """ Creates a Cadquery 3D geometry 
+        
+        Returns:
+            CadQuery solid: A 3D solid Volume """
+
+        print("creating Solid")
+        # Create solid from points
+        points = [ps[:2] for ps in self.points]
+
+        wire = cq.Workplane(self.workplane).moveTo(points[0][0], points[0][1]) \
+                                    .lineTo(points[1][0],points[1][1]) \
+                                    .threePointArc((points[2][0],points[2][1]), (points[3][0],points[3][1])) \
+                                    .lineTo(points[4][0],points[4][1]) \
+                                    .threePointArc((points[5][0],points[5][1]), (points[6][0],points[6][1])) \
+                                    .lineTo(points[7][0], points[7][1]) \
+                                    .lineTo(points[8][0],points[8][1]) \
+                                    .lineTo(points[9][0], points[9][1]) \
+                                    .threePointArc((points[10][0], points[10][1]), (points[11][0], points[11][1])) \
+                                    .lineTo(points[12][0],points[12][1]) \
+                                    .threePointArc((points[13][0], points[13][1]), (points[14][0], points[14][1])) \
+                                    .lineTo(points[15][0], points[15][1]) \
+                                    .lineTo(points[16][0], points[16][1]).close().consolidateWires()
+
+                                    
+        solid = wire.extrude(distance=-self.distance / 2, both=True)
+        solid = self.rotate_solid(solid)
+
+        cutting_wedge = calculate_wedge_cut(self)
+        solid = self.perform_boolean_operations(solid, wedge_cut=cutting_wedge)     
+
+        self.solid = solid
+        print(self.with_inner_leg)
+        if self.with_inner_leg[0] == True:
+            print("creating Inner Leg")
+            inner_leg_solid = cq.Workplane(self.workplane)
+            inner_leg_solid = inner_leg_solid.polyline(self.inner_leg_connection_points).close().extrude(distance=-self.distance / 2, both=True)
+
+            inner_leg_solid = self.rotate_solid(inner_leg_solid)
+            inner_leg_solid = self.perform_boolean_operations(inner_leg_solid, wedge_cut=cutting_wedge)
+
+            solid = cq.Compound.makeCompound([a.val() for a in [inner_leg_solid, solid]])
+
+            self.solid = solid
+
+        return solid
+
+
+
 if __name__== "__main__":
         
     obj = ToroidalFieldCoilRectangleRoundCorners(
@@ -240,6 +303,8 @@ if __name__== "__main__":
         distance= 20,
         number_of_coils= 1,
         rotation_angle=180,
+        with_inner_leg=True,
         test=True,
         analyse=True
         )
+    #obj.export_2d_image("testfile.png")
