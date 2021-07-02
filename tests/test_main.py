@@ -22,7 +22,7 @@ obj2 = ptfc.ToroidalFieldCoilRectangleRoundCorners(
     )
 
 @pytest.mark.parametric
-@pytest.mark.skip
+#@pytest.mark.skip
 def test_parametric_surface_area_wLeg():
     paramak_area = obj2.area
     [print(val) for val in obj2.areas]
@@ -30,10 +30,10 @@ def test_parametric_surface_area_wLeg():
     assert pytest.approx(package_area) == paramak_area
 
 @pytest.mark.parametric
-@pytest.mark.skip
+#@pytest.mark.skip
 def test_parametric_volume_wLeg():
     paramak_vol = obj2.volume
-    package_vol = ptfc.volume((50, 0),(100, 100), 20, 10)
+    package_vol = ptfc.volume((50, 0),(100, 100), 20, 10,with_inner_leg=True)
     assert pytest.approx(package_vol) == paramak_vol
 
 @pytest.mark.parametric
