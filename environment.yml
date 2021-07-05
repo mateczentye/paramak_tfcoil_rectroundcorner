@@ -23,3 +23,5 @@ dependencies:
     - sphinxcadquery
     - defusedxml
     - myst_parser
+    - paramak
+
