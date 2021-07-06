@@ -15,7 +15,6 @@ jobs:
     - name: Build and test with Docker
       run: |
         ci_env=`bash <(curl -s https://codecov.io/env)`
-        docker run $ci_env -e CI=true ...
         docker build -t paramak_tfcoil_rectroundcorner .
         docker run --rm paramak_tfcoil_rectroundcorner /bin/bash -c "bash run_tests.sh" 
         ./codecov -t ${{ secrets.CODECOV_TOKEN }}
