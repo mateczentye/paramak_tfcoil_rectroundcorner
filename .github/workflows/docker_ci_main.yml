@@ -14,15 +14,5 @@ jobs:
     - uses: actions/checkout@v1
     - name: Build and test with Docker
       run: |
-        ci_env=`bash <(curl -s https://codecov.io/env)`
         docker build -t paramak_tfcoil_rectroundcorner .
-        ducker run $ci_env -e CI=true
         docker run --rm paramak_tfcoil_rectroundcorner /bin/bash -c "bash run_tests.sh"
-
-    - name: Upload to Codecov
-      uses: codecov/codecov-action@v1
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-        fail_ci_if_error: true
-        functionalities: coveragepy
-        verbose: true
