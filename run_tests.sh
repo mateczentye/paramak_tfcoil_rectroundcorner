@@ -1,2 +1,2 @@
 
- pytest --cov=./ --cov-report=xml
+ pytest --cov-report=xml
