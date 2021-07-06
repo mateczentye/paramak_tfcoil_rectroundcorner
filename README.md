@@ -3,6 +3,7 @@
 ![GitHub](https://img.shields.io/github/license/mateczentye/paramak_tfcoil_rectroundcorner)
 ![Docker Cloud Automated build](https://img.shields.io/docker/cloud/automated/mateczentye/paramak_tfcoil_rectroundcorner)
 ![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/mateczentye/paramak_tfcoil_rectroundcorner)
+[![codecov](https://codecov.io/gh/mateczentye/paramak_tfcoil_rectroundcorner/branch/main/graph/badge.svg?token=MKLD3EUFQB)](https://codecov.io/gh/mateczentye/paramak_tfcoil_rectroundcorner)
 
 # paramak_tfcoil_rectroundcorner
 
