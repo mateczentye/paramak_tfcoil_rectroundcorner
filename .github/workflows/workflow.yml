@@ -7,9 +7,9 @@ jobs:
       OS: ubuntu-latest
       PYTHON: '3.8'
     steps:
-    - uses: actions/checkout@main
+    - uses: actions/checkout@v2
     - name: Setup Python
-      uses: actions/setup-python@main
+      uses: actions/setup-python@v2
       with:
         python-version: 3.8
     - name: Generate coverage report
