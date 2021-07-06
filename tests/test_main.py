@@ -1,9 +1,11 @@
 import pytest
+from paramak_tfcoil_rectroundcorner.core import ToroidalFieldCoilRectangleRoundCorners
+from paramak_tfcoil_rectroundcorner.test_module import volume, surface_area
 pytest.importorskip('paramak')
-import paramak_tfcoil_rectroundcorner as ptfc
+#import paramak_tfcoil_rectroundcorner as ptfc
 
 
-obj = ptfc.ToroidalFieldCoilRectangleRoundCorners(
+obj = ToroidalFieldCoilRectangleRoundCorners(
     lower_inner_coordinates= (50,0),
     mid_point_coordinates= (100,100),
     thickness= 20,
@@ -12,7 +14,7 @@ obj = ptfc.ToroidalFieldCoilRectangleRoundCorners(
     with_inner_leg=False
     )
 
-obj2 = ptfc.ToroidalFieldCoilRectangleRoundCorners(
+obj2 = ToroidalFieldCoilRectangleRoundCorners(
     lower_inner_coordinates= (50,0),
     mid_point_coordinates= (100,100),
     thickness= 20,
@@ -26,44 +28,44 @@ obj2 = ptfc.ToroidalFieldCoilRectangleRoundCorners(
 def test_parametric_surface_area_wLeg():
     paramak_area = obj2.area
     [print(val) for val in obj2.areas]
-    package_area = ptfc.surface_area((50, 0),(100, 100), 20, 10,with_inner_leg=True)
+    package_area = surface_area((50, 0),(100, 100), 20, 10,with_inner_leg=True)
     assert pytest.approx(package_area) == paramak_area
 
 @pytest.mark.parametric
 #@pytest.mark.skip
 def test_parametric_volume_wLeg():
     paramak_vol = obj2.volume
-    package_vol = ptfc.volume((50, 0),(100, 100), 20, 10,with_inner_leg=True)
+    package_vol = volume((50, 0),(100, 100), 20, 10,with_inner_leg=True)
     assert pytest.approx(package_vol) == paramak_vol
 
 @pytest.mark.parametric
 def test_parametric_surface_area():
     paramak_area = obj.area
-    package_area = ptfc.surface_area((50, 0),(100, 100), 20, 10)
+    package_area = surface_area((50, 0),(100, 100), 20, 10)
     assert pytest.approx(package_area) == paramak_area
 
 @pytest.mark.parametric
 def test_parametric_volume():
     paramak_vol = obj.volume
-    package_vol = ptfc.volume((50, 0),(100, 100), 20, 10)
+    package_vol = volume((50, 0),(100, 100), 20, 10)
     assert pytest.approx(package_vol) == paramak_vol
 
 @pytest.mark.analytical
 def test_manual_area():
     analytical = 19872.92
-    computational = ptfc.surface_area((50, 0),(100, 100), 20, 10)
+    computational = surface_area((50, 0),(100, 100), 20, 10)
     assert pytest.approx(computational) == analytical
 
 @pytest.mark.analytical
 def test_manual_volume():
     analytical = 64909.73
-    computational = ptfc.volume((50, 0),(100, 100), 20, 10)
+    computational = volume((50, 0),(100, 100), 20, 10)
     assert pytest.approx(computational) == analytical
 
 @pytest.mark.dtype
 def test_input_param_lower_inner():
     with pytest.raises(TypeError):
-        o = ptfc.ToroidalFieldCoilRectangleRoundCorners(
+        o = ToroidalFieldCoilRectangleRoundCorners(
             lower_inner_coordinates= 1,
             mid_point_coordinates= (100,100),
             thickness= 20,
@@ -75,7 +77,7 @@ def test_input_param_lower_inner():
 @pytest.mark.dtype
 def test_input_param_mid_point():
     with pytest.raises(TypeError):
-        o = ptfc.ToroidalFieldCoilRectangleRoundCorners(
+        o = ToroidalFieldCoilRectangleRoundCorners(
             lower_inner_coordinates= (50,0),
             mid_point_coordinates= 1,
             thickness= 20,
@@ -87,7 +89,7 @@ def test_input_param_mid_point():
 @pytest.mark.dtype
 def test_input_param_thickness():
     with pytest.raises(TypeError):
-        o = ptfc.ToroidalFieldCoilRectangleRoundCorners(
+        o = ToroidalFieldCoilRectangleRoundCorners(
             lower_inner_coordinates= (50,0),
             mid_point_coordinates= (100,100),
             thickness= "fail",
@@ -99,7 +101,7 @@ def test_input_param_thickness():
 @pytest.mark.dtype
 def test_input_param_distance():
     with pytest.raises(TypeError):
-        o = ptfc.ToroidalFieldCoilRectangleRoundCorners(
+        o = ToroidalFieldCoilRectangleRoundCorners(
             lower_inner_coordinates= (50,0),
             mid_point_coordinates= (100,100),
             thickness= 20,
@@ -111,7 +113,7 @@ def test_input_param_distance():
 @pytest.mark.dtype
 def test_input_param_num_coil():
     with pytest.raises(TypeError):
-        o = ptfc.ToroidalFieldCoilRectangleRoundCorners(
+        o = ToroidalFieldCoilRectangleRoundCorners(
             lower_inner_coordinates= (50,0),
             mid_point_coordinates= (100,100),
             thickness= 20,
