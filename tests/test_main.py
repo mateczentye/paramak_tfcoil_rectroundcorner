@@ -1,7 +1,8 @@
 import pytest
+pytest.importorskip('paramak')
 from paramak_tfcoil_rectroundcorner.core import ToroidalFieldCoilRectangleRoundCorners
 from paramak_tfcoil_rectroundcorner.test_module import volume, surface_area
-pytest.importorskip('paramak')
+
 #import paramak_tfcoil_rectroundcorner as ptfc
 
 
