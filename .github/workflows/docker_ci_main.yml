@@ -16,9 +16,8 @@ jobs:
       run: |
         ci_env=`bash <(curl -s https://codecov.io/env)`
         docker build -t paramak_tfcoil_rectroundcorner .
+        ducker run $ci_env -e CI=true
         docker run --rm paramak_tfcoil_rectroundcorner /bin/bash -c "bash run_tests.sh"
-        mv coverage.xml tests
-        ./codecov
 
     - name: Upload to Codecov
       uses: codecov/codecov-action@v1
