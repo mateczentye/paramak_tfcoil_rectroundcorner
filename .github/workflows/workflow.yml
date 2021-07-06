@@ -1,18 +1,15 @@
-name: Example workflow for Codecov
+name: Workflow for Codecov
 on: [push]
 jobs:
   run:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ubuntu-latest
     env:
-      OS: ${{ matrix.os }}
+      OS: ubuntu-latest
       PYTHON: '3.8'
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@main
     - name: Setup Python
-      uses: actions/setup-python@master
+      uses: actions/setup-python@main
       with:
         python-version: 3.8
     - name: Generate coverage report
