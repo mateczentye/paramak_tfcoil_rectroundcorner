@@ -19,7 +19,7 @@ jobs:
         docker run $ci_env -e CI=true ...
         | --rm paramak_tfcoil_rectroundcorner /bin/bash -c "bash run_tests.sh"
         | mv coverage.xml tests
-        ./codecov
+        | ./codecov
 
     - name: Upload to Codecov
       uses: codecov/codecov-action@v1
