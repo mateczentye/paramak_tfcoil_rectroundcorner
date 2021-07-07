@@ -1,2 +1,2 @@
 
-pytest tests/ --cov=. --cov-report=xml
+pytest --cov=codecov --cov-report=xml tests/ 
