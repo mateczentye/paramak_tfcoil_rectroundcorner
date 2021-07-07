@@ -6,14 +6,15 @@ on:
     - develop  
     - main
 
+env: ci_env=`bash <(curl -s https://codecov.io/env)`
+
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v1
-    - name: Build and test with Docker
+      uses: actions/checkout@v1
+      name: Build and test with Docker
       run: |
         docker build -t paramak_tfcoil_rectroundcorner .
-        ci_env=`bash <(curl -s https://codecov.io/env)`
         docker run $ci_env -e CI=true && --rm paramak_tfcoil_rectroundcorner /bin/bash -c "bash run_tests.sh && curl -Os https://uploader.codecov.io/latest/linux/codecov && chmod +x codecov && ./codecov -t ${{ secrets.CODECOV_TOKEN }}"
