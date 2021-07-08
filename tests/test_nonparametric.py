@@ -1,10 +1,9 @@
 from _pytest.capture import TeeCaptureIO
 import pytest
 pytest.importorskip('paramak')
-import paramak_tfcoil_rectroundcorner as ptfc
+from paramak_tfcoil_rectroundcorner.core import ToroidalFieldCoilRectangleRoundCorners
 
-
-obj = ptfc.ToroidalFieldCoilRectangleRoundCorners(
+obj = ToroidalFieldCoilRectangleRoundCorners(
     lower_inner_coordinates= (50,0),
     mid_point_coordinates= (100,100),
     thickness= 20,
@@ -15,7 +14,7 @@ obj = ptfc.ToroidalFieldCoilRectangleRoundCorners(
 @pytest.mark.length
 def test_input_tuple2():
     with pytest.raises(ValueError):
-        o = ptfc.ToroidalFieldCoilRectangleRoundCorners(
+        o = ToroidalFieldCoilRectangleRoundCorners(
             lower_inner_coordinates= (50,0,5),
             mid_point_coordinates= (100,100),
             thickness= 20,
@@ -26,7 +25,7 @@ def test_input_tuple2():
 @pytest.mark.length
 def test_input_tuple2():
     with pytest.raises(ValueError):
-        o = ptfc.ToroidalFieldCoilRectangleRoundCorners(
+        o = ToroidalFieldCoilRectangleRoundCorners(
             lower_inner_coordinates= (50,0),
             mid_point_coordinates= (100,100,100),
             thickness= 20,
@@ -37,7 +36,7 @@ def test_input_tuple2():
 @pytest.mark.value
 def test_input_num_coils():
     with pytest.raises(TypeError):
-        o = ptfc.ToroidalFieldCoilRectangleRoundCorners(
+        o = ToroidalFieldCoilRectangleRoundCorners(
             lower_inner_coordinates= (50,0),
             mid_point_coordinates= (100,100),
             thickness= 20,
@@ -48,7 +47,7 @@ def test_input_num_coils():
 @pytest.mark.value
 def test_input_x_coordinates():
     with pytest.raises(ValueError):
-        o = ptfc.ToroidalFieldCoilRectangleRoundCorners(
+        o = ToroidalFieldCoilRectangleRoundCorners(
             lower_inner_coordinates= (50,0),
             mid_point_coordinates= (0,100),
             thickness= 20,
@@ -59,7 +58,7 @@ def test_input_x_coordinates():
 @pytest.mark.value
 def test_input_testboolean():
     with pytest.raises(TypeError):
-        o = ptfc.ToroidalFieldCoilRectangleRoundCorners(
+        o = ToroidalFieldCoilRectangleRoundCorners(
             lower_inner_coordinates= (50,0),
             mid_point_coordinates= (100,100),
             thickness= 20,
@@ -72,7 +71,7 @@ def test_input_testboolean():
 @pytest.mark.value
 def test_input_analyseboolean():
     with pytest.raises(TypeError):
-        o = ptfc.ToroidalFieldCoilRectangleRoundCorners(
+        o = ToroidalFieldCoilRectangleRoundCorners(
             lower_inner_coordinates= (50,0),
             mid_point_coordinates= (100,100),
             thickness= 20,
